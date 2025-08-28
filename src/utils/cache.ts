@@ -32,18 +32,56 @@ class TopicCache {
   private maxAge: number; // Cache expiration in milliseconds
 
   constructor() {
-    this.cacheDir = path.join(process.cwd(), '.cache');
+    // Check if we're in a serverless environment or caching is explicitly disabled
+    const isVercel = process.env.VERCEL || process.env.VERCEL_ENV;
+    const isNetlify = process.env.NETLIFY;
+    const isServerless = isVercel || isNetlify || process.env.NODE_ENV === 'production';
+    const cachingDisabled = process.env.DISABLE_CACHE === 'true';
+    
+    if (cachingDisabled) {
+      console.log('Caching explicitly disabled via DISABLE_CACHE environment variable');
+      this.cacheDir = '';
+    } else if (isServerless) {
+      // Use /tmp directory in serverless environments
+      this.cacheDir = path.join('/tmp', '.cache');
+      console.log('Using /tmp cache directory for serverless environment');
+    } else {
+      // Use local .cache directory for development
+      this.cacheDir = path.join(process.cwd(), '.cache');
+    }
+    
     this.maxAge = 24 * 60 * 60 * 1000; // 24 hours
     this.ensureCacheDir();
   }
 
   private ensureCacheDir() {
-    if (!fs.existsSync(this.cacheDir)) {
-      fs.mkdirSync(this.cacheDir, { recursive: true });
+    try {
+      if (!fs.existsSync(this.cacheDir)) {
+        fs.mkdirSync(this.cacheDir, { recursive: true });
+      }
+    } catch (error) {
+      console.warn('Could not create cache directory:', error);
+      // Fallback to a different directory if cache creation fails
+      const fallbackDir = path.join('/tmp', 'cache-fallback');
+      try {
+        if (!fs.existsSync(fallbackDir)) {
+          fs.mkdirSync(fallbackDir, { recursive: true });
+        }
+        this.cacheDir = fallbackDir;
+        console.log('Using fallback cache directory:', this.cacheDir);
+      } catch (fallbackError) {
+        console.error('Could not create fallback cache directory:', fallbackError);
+        // Disable caching if we can't create any directory
+        this.cacheDir = '';
+      }
     }
   }
 
   private getCacheFilePath(type: 'manim' | 'voice' | 'lesson', topic: string): string {
+    if (!this.cacheDir) {
+      // Return empty path if caching is disabled
+      return '';
+    }
     const safeTopic = topic.toLowerCase().replace(/[^a-z0-9]/g, '_');
     return path.join(this.cacheDir, `${type}_${safeTopic}.json`);
   }
@@ -57,7 +95,8 @@ class TopicCache {
     try {
       const filePath = this.getCacheFilePath('manim', topic);
       
-      if (!fs.existsSync(filePath)) {
+      // Return null if caching is disabled or file doesn't exist
+      if (!filePath || !fs.existsSync(filePath)) {
         return null;
       }
 
@@ -82,6 +121,13 @@ class TopicCache {
   async setManimCode(topic: string, code: string, validatedCode: string): Promise<void> {
     try {
       const filePath = this.getCacheFilePath('manim', topic);
+      
+      // Skip caching if disabled
+      if (!filePath) {
+        console.log('Caching disabled, skipping setManimCode');
+        return;
+      }
+
       const cacheEntry: CacheEntry<ManimCodeCache> = {
         data: { code, validatedCode },
         timestamp: Date.now(),
@@ -100,7 +146,8 @@ class TopicCache {
     try {
       const filePath = this.getCacheFilePath('voice', topic);
       
-      if (!fs.existsSync(filePath)) {
+      // Return null if caching is disabled or file doesn't exist
+      if (!filePath || !fs.existsSync(filePath)) {
         return null;
       }
 
@@ -125,6 +172,13 @@ class TopicCache {
   async setVoiceScript(topic: string, scriptData: VoiceScriptCache): Promise<void> {
     try {
       const filePath = this.getCacheFilePath('voice', topic);
+      
+      // Skip caching if disabled
+      if (!filePath) {
+        console.log('Caching disabled, skipping setVoiceScript');
+        return;
+      }
+
       const cacheEntry: CacheEntry<VoiceScriptCache> = {
         data: scriptData,
         timestamp: Date.now(),
@@ -143,7 +197,8 @@ class TopicCache {
     try {
       const filePath = this.getCacheFilePath('lesson', topic);
       
-      if (!fs.existsSync(filePath)) {
+      // Return null if caching is disabled or file doesn't exist
+      if (!filePath || !fs.existsSync(filePath)) {
         return null;
       }
 
@@ -168,6 +223,13 @@ class TopicCache {
   async setLessonBreakdown(topic: string, breakdownData: LessonBreakdownCache): Promise<void> {
     try {
       const filePath = this.getCacheFilePath('lesson', topic);
+      
+      // Skip caching if disabled
+      if (!filePath) {
+        console.log('Caching disabled, skipping setLessonBreakdown');
+        return;
+      }
+
       const cacheEntry: CacheEntry<LessonBreakdownCache> = {
         data: breakdownData,
         timestamp: Date.now(),
@@ -184,6 +246,11 @@ class TopicCache {
   // Cache Management
   async clearExpiredCache(): Promise<void> {
     try {
+      // Skip if caching is disabled
+      if (!this.cacheDir || !fs.existsSync(this.cacheDir)) {
+        return;
+      }
+
       const files = fs.readdirSync(this.cacheDir);
       let cleared = 0;
 
@@ -215,6 +282,11 @@ class TopicCache {
 
   async getCacheStats(): Promise<{ manimEntries: number; voiceEntries: number; lessonEntries: number; totalSize: string }> {
     try {
+      // Return empty stats if caching is disabled
+      if (!this.cacheDir || !fs.existsSync(this.cacheDir)) {
+        return { manimEntries: 0, voiceEntries: 0, lessonEntries: 0, totalSize: '0 KB' };
+      }
+
       const files = fs.readdirSync(this.cacheDir);
       let manimEntries = 0;
       let voiceEntries = 0;
@@ -244,6 +316,12 @@ class TopicCache {
 
   async clearAllCache(): Promise<void> {
     try {
+      // Skip if caching is disabled
+      if (!this.cacheDir || !fs.existsSync(this.cacheDir)) {
+        console.log('Caching disabled, no cache to clear');
+        return;
+      }
+
       const files = fs.readdirSync(this.cacheDir);
       for (const file of files) {
         fs.unlinkSync(path.join(this.cacheDir, file));
