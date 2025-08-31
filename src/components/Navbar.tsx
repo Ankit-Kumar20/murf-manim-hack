@@ -1,6 +1,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import DarkModeToggle from "./DarkModeToggle";
 
 interface NavbarProps {
   showBackButton?: boolean;
@@ -22,7 +23,7 @@ const Navbar: React.FC<NavbarProps> = ({
           {showBackButton && (
             <button
               onClick={() => router.push(backPath)}
-              className="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center transition-colors hover:bg-gray-800 cursor-pointer"
+              className="w-8 h-8 bg-black dark:bg-purple-800 text-white rounded-full flex items-center justify-center transition-colors hover:bg-gray-800 dark:hover:bg-purple-700 cursor-pointer"
               aria-label="Go back"
             >
               <svg
@@ -43,14 +44,14 @@ const Navbar: React.FC<NavbarProps> = ({
           {!showBackButton && <div className="w-8"></div>}
 
           <div className="flex items-center">
-            <h1 className="text-2xl md:text-3xl font-serif font-medium text-gray-900 tracking-tight">
+            <h1 className="text-2xl md:text-3xl font-serif font-medium text-gray-900 dark:text-white tracking-tight">
               <span className="inline-flex items-center gap-2">
                 Mona
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                   fill="currentColor"
-                  className="w-5 h-5 text-pink-500 inline-block align-middle"
+                  className="w-5 h-5 text-pink-500 dark:text-purple-400 inline-block align-middle"
                   aria-label="heart"
                 >
                   <path
@@ -64,11 +65,12 @@ const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           <div className="flex items-center gap-3">
+            <DarkModeToggle />
             {!hideCreateButtons && (
               <>
                 <Link
                   href="/explain"
-                  className="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center transition-colors hover:bg-gray-800 cursor-pointer shadow-lg"
+                  className="w-8 h-8 bg-black dark:bg-purple-800 text-white rounded-full flex items-center justify-center transition-colors hover:bg-gray-800 dark:hover:bg-purple-700 cursor-pointer shadow-lg"
                   title="Create Video"
                   aria-label="Create video explanation"
                 >
@@ -84,7 +86,7 @@ const Navbar: React.FC<NavbarProps> = ({
                 </Link>
                 <Link
                   href="/article"
-                  className="w-8 h-8 bg-white/60 backdrop-blur-sm text-gray-700 rounded-full flex items-center justify-center transition-colors hover:bg-white/80 cursor-pointer shadow-lg border border-white/50"
+                  className="w-8 h-8 bg-white/60 dark:bg-purple-900/50 backdrop-blur-sm text-gray-700 dark:text-purple-200 rounded-full flex items-center justify-center transition-colors hover:bg-white/80 dark:hover:bg-purple-800/50 cursor-pointer shadow-lg border border-white/50 dark:border-purple-600/30"
                   title="Create Article"
                   aria-label="Create article explanation"
                 >
@@ -110,7 +112,7 @@ const Navbar: React.FC<NavbarProps> = ({
             )}
             <Link
               href="/library"
-              className="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center transition-colors hover:bg-gray-800 cursor-pointer shadow-lg"
+              className="w-8 h-8 bg-black dark:bg-purple-800 text-white rounded-full flex items-center justify-center transition-colors hover:bg-gray-800 dark:hover:bg-purple-700 cursor-pointer shadow-lg"
               title="View Library"
               aria-label="Go to library"
             >

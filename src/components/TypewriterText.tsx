@@ -45,7 +45,7 @@ const TypewriterText: React.FC = () => {
 
   return (
     <motion.span
-      className="text-3xl md:text-5xl lg:text-6xl font-serif font-medium text-gray-400 tracking-tight text-center"
+      className="text-3xl md:text-5xl lg:text-6xl font-serif font-medium text-gray-400 dark:text-purple-400 tracking-tight text-center"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -54,7 +54,7 @@ const TypewriterText: React.FC = () => {
       <motion.span
         animate={{ opacity: [1, 0] }}
         transition={{ duration: 0.8, repeat: Infinity, repeatType: "reverse" }}
-        className="text-gray-400"
+        className="text-gray-400 dark:text-purple-400"
       >
         |
       </motion.span>

@@ -1,5 +1,6 @@
 import { Instrument_Serif } from "next/font/google";
 import "./globals.css";
+import { DarkModeProvider } from "../contexts/DarkModeContext";
 
 const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
@@ -22,7 +23,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${instrumentSerif.variable}`}>{children}</body>
+      <body className={`${instrumentSerif.variable}`}>
+        <DarkModeProvider>
+          {children}
+        </DarkModeProvider>
+      </body>
     </html>
   );
 }

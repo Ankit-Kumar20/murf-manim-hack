@@ -3,6 +3,14 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --primary-purple: #7c3aed;
+  --primary-purple-dark: #581c87;
+  --secondary-purple: #a855f7;
+  --accent-purple: #c084fc;
+  --dark-bg: #0f0f0f;
+  --dark-surface: #1a1a1a;
+  --dark-text: #f5f5f5;
+  --dark-text-secondary: #a3a3a3;
 }
 
 @theme inline {
@@ -15,9 +23,28 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: var(--dark-bg);
+    --foreground: var(--dark-text);
   }
+}
+
+/* Dark mode class for manual toggle */
+.dark {
+  --background: var(--dark-bg);
+  --foreground: var(--dark-text);
+}
+
+/* Custom dark mode utilities */
+.dark .bg-surface {
+  background-color: var(--dark-surface);
+}
+
+.dark .text-dark-secondary {
+  color: var(--dark-text-secondary);
+}
+
+.dark .border-dark {
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 body {
