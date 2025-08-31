@@ -1,41 +1,64 @@
-# Murf Manim Hack
+# Mona
 
-A Next.js application that generates educational mathematical animations using Manim in a sandboxed environment. This project combines AI-powered concept explanation with dynamic mathematical visualizations.
+An AI-powered educational platform that creates comprehensive learning experiences through animated visualizations, written articles, audio narration, and interactive conversations. Built with Next.js and integrated with multiple AI services for generating educational content.
 
 ## 🎯 Features
 
-- **AI-Powered Concept Explanation**: Generate structured explanations for mathematical and scientific concepts
-- **Manim Integration**: Create beautiful mathematical animations using Manim in a secure sandbox
-- **E2B Sandbox Environment**: Execute code safely in isolated containers
-- **Real-time Code Generation**: Generate Manim code dynamically based on user input
-- **Interactive UI**: Modern, responsive interface with shader-based backgrounds
+- **🎬 Video Generation**: Create Manim-powered mathematical animations with synchronized audio narration
+- **📝 Article Generation**: Generate structured educational articles with AI-powered content
+- **🎵 Audio Narration**: Convert articles to natural speech using Murf AI's text-to-speech
+- **💬 Interactive Chatbot**: Engage in conversational learning with AI-powered explanations
+- **🌐 Multilingual Support**: Translate content and generate audio in multiple languages
+- **🎨 Visual Learning**: Dynamic mathematical visualizations using Manim animation engine
+- **📚 Content Library**: Browse and manage generated educational materials
+- **🔒 Secure Sandbox**: Execute code safely in isolated E2B containers
+- **⚡ Real-time Generation**: Dynamic content creation based on user input
+- **🎭 Modern UI**: Responsive interface with shader backgrounds and smooth animations
+
+## 📱 Pages & Routes
+
+- **Home (/)** - Landing page with service overview and quick actions
+- **Explain (/explain/[topic])** - Generate animated videos for mathematical concepts
+- **Article (/article)** - Create structured educational articles
+- **Library (/library)** - Browse and manage generated content
+- **Translation Demo (/translation-demo)** - Test multilingual capabilities
+- **Loading (/loading)** - Processing states during content generation
 
 ## 🛠 Tech Stack
 
 - **Frontend**: Next.js 15, React 19, TypeScript
-- **Styling**: Tailwind CSS 4, Paper Design Shaders
-- **AI**: OpenRouter (Gemini Flash 1.5), Murf AI for TTS
-- **Sandbox**: E2B Code Interpreter
-- **Animation**: Manim (Mathematical Animation Engine)
-- **Package Manager**: Bun
+- **Styling**: Tailwind CSS 4, Paper Design Shaders, Motion (animations)
+- **AI Services**:
+  - **OpenRouter**: Primary AI provider (GPT-4, Gemini, Claude)
+  - **Google AI**: Alternative AI provider for enhanced responses
+  - **Murf AI**: Professional text-to-speech and voice synthesis
+- **Sandbox & Execution**: E2B Code Interpreter for secure code execution
+- **Animation**: Manim (Mathematical Animation Engine) for video generation
+- **Storage**: Vercel Blob for file storage and delivery
+- **Package Manager**: Bun (with npm fallback)
+- **Development**: ESLint, Turbopack for fast builds
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ or Bun
-- E2B account and API key
-- OpenRouter API key (for AI-powered code generation)
+- **Node.js 18+** or **Bun** (recommended for faster installs)
+- **E2B Account** - [Sign up at e2b.dev](https://e2b.dev) for sandbox execution
+- **OpenRouter API Key** - [Get API key at openrouter.ai](https://openrouter.ai) for AI content generation
+- **Murf AI API Key** - [Sign up at murf.ai](https://murf.ai) for text-to-speech
+- **Vercel Blob Token** - For file storage (optional, can use local storage)
 
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/Ankit-Kumar20/murf-manim-hack.git
    cd murf-manim-hack
    ```
 
 2. **Install dependencies**
+
    ```bash
    bun install
    # or
@@ -44,6 +67,7 @@ A Next.js application that generates educational mathematical animations using M
 
 3. **Environment Setup**
    Create a `.env.local` file with your API keys:
+
    ```env
    E2B_API_KEY=your_e2b_api_key
    OPENROUTER_API_KEY=your_openrouter_api_key
@@ -52,6 +76,7 @@ A Next.js application that generates educational mathematical animations using M
    ```
 
 4. **Run the development server**
+
    ```bash
    bun dev
    # or
@@ -68,6 +93,7 @@ This project uses a custom E2B sandbox environment with Manim pre-installed.
 ### Sandbox Template: `q6wznn8hq65ffgkd0tqh`
 
 The sandbox includes:
+
 - Python 3.10
 - Manim with all dependencies
 - FFmpeg for video processing
@@ -82,6 +108,7 @@ e2b template build
 ```
 
 The template configuration is defined in:
+
 - `e2b.Dockerfile` - Docker configuration with Manim installation
 - `e2b.toml` - E2B template configuration
 
@@ -89,33 +116,74 @@ The template configuration is defined in:
 
 ```
 ├── src/
-│   ├── app/                    # Next.js app directory
-│   │   ├── api/               # API routes
-│   │   │   ├── code-execution/ # Code execution endpoint
-│   │   │   └── generate-manim/ # Manim generation endpoint
-│   │   ├── explain/           # Concept explanation pages
-│   │   └── loading/           # Loading page
-│   ├── components/            # React components
-│   │   ├── ConceptInputForm.tsx
-│   │   ├── Navbar.tsx
-│   │   ├── ShaderBackground.tsx
-│   │   └── TypewriterText.tsx
-│   └── utils/                 # Utility functions
-│       ├── formatManimCode.ts
-│       ├── sandbox.ts         # E2B sandbox integration
-│       └── structuredManimGenerator.ts
-├── public/                    # Static assets
-├── e2b.Dockerfile            # Custom E2B sandbox configuration
-├── e2b.toml                  # E2B template settings
-└── test_manim.ipynb          # Manim testing notebook
+│   ├── app/                          # Next.js app directory
+│   │   ├── api/                      # API routes
+│   │   │   ├── chatbot/              # Conversational AI endpoint
+│   │   │   ├── code-execution/       # Code execution in sandbox
+│   │   │   ├── generate-article/     # Article generation
+│   │   │   ├── generate-audio/       # Text-to-speech audio generation
+│   │   │   ├── generate-lesson/      # Lesson plan generation
+│   │   │   ├── generate-manim/       # Manim code generation
+│   │   │   ├── test-env/             # Environment testing
+│   │   │   ├── test-voices/          # Voice testing
+│   │   │   ├── translate/            # Translation services
+│   │   │   └── voices/               # Voice options
+│   │   ├── article/                  # Article generation pages
+│   │   ├── explain/                  # Concept explanation pages
+│   │   ├── library/                  # Content library
+│   │   ├── translation-demo/         # Translation demonstration
+│   │   ├── loading/                  # Loading states
+│   │   ├── layout.tsx                # Root layout
+│   │   ├── page.tsx                  # Homepage
+│   │   ├── globals.css               # Global styles
+│   │   └── favicon.ico               # App favicon
+│   ├── components/                   # React components
+│   │   ├── ArticleDisplay.tsx        # Article rendering
+│   │   ├── ConceptInputForm.tsx      # Input forms
+│   │   ├── ContentModeSelector.tsx   # Content type selection
+│   │   ├── EnhancedArticleDisplay.tsx # Advanced article display
+│   │   ├── EnhancedLessonBreakdown.tsx # Lesson components
+│   │   ├── Footer.tsx                # Site footer
+│   │   ├── LanguageSelector.tsx      # Language selection
+│   │   ├── LessonArticleDisplay.tsx  # Lesson article display
+│   │   ├── LessonBreakdown.tsx       # Lesson breakdown
+│   │   ├── Navbar.tsx                # Navigation
+│   │   ├── ShaderBackground.tsx      # Background effects
+│   │   ├── SimpleEnhancedArticleDisplay.tsx # Simplified display
+│   │   ├── SubmittedTopicTitle.tsx   # Topic display
+│   │   ├── TypewriterText.tsx        # Animated text
+│   │   └── VideoWithAudio.tsx        # Video with audio sync
+│   └── utils/                        # Utility functions
+│       ├── blobStorage.ts            # File storage utilities
+│       ├── clearCache.ts             # Cache management
+│       ├── formatManimCode.ts        # Manim code formatting
+│       ├── lessonBreakdown.ts        # Lesson processing
+│       ├── murfTTS.ts                # Text-to-speech integration
+│       ├── sandbox.ts                # E2B sandbox integration
+│       ├── structuredManimGenerator.ts # Manim code generation
+│       ├── translation.ts            # Translation utilities
+│       └── voiceNarration.ts         # Voice narration
+├── public/                           # Static assets
+│   ├── audio/                        # Generated audio files
+│   ├── videos/                       # Generated video files
+│   ├── *.svg                         # UI icons
+│   └── *.ico                         # Favicons
+├── e2b.Dockerfile                    # E2B sandbox configuration
+├── e2b.toml                          # E2B template settings
+├── StringTheoryScene.py              # Example Manim scene
+└── package.json                      # Dependencies and scripts
 ```
 
 ## 🔧 API Endpoints
 
-### `/api/generate-manim`
-Generates Manim code for mathematical concepts.
+### Core Generation Endpoints
+
+#### `/api/generate-manim`
+
+Generates Manim animation code for mathematical concepts.
 
 **Request:**
+
 ```json
 {
   "topic": "quadratic functions",
@@ -124,6 +192,7 @@ Generates Manim code for mathematical concepts.
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -132,30 +201,151 @@ Generates Manim code for mathematical concepts.
 }
 ```
 
-### `/api/code-execution`
-Executes code in the E2B sandbox environment.
+#### `/api/generate-article`
+
+Creates structured educational articles with AI-generated content.
 
 **Request:**
+
 ```json
 {
-  "code": "print('Hello from sandbox!')",
-  "language": "python"
+  "topic": "machine learning",
+  "audience": "beginners",
+  "sections": ["introduction", "basics", "applications"]
 }
 ```
 
+#### `/api/generate-lesson`
+
+Generates comprehensive lesson plans with breakdown and activities.
+
+#### `/api/generate-audio`
+
+Converts articles to speech using Murf AI's text-to-speech.
+
+**Request:**
+
+```json
+{
+  "articleContent": {
+    "title": "Introduction to Algebra",
+    "introduction": "...",
+    "sections": [...],
+    "conclusion": "..."
+  },
+  "languages": ["en", "es"],
+  "voiceOptions": {
+    "voice": "en-US-female-1",
+    "speed": 1.0
+  }
+}
+```
+
+### Interactive Features
+
+#### `/api/chatbot`
+
+Provides conversational AI for educational topics with session management.
+
+**Request:**
+
+```json
+{
+  "message": "Explain derivatives",
+  "sessionId": "unique-session-123",
+  "topic": "calculus"
+}
+```
+
+#### `/api/translate`
+
+Translates text and articles to multiple languages.
+
+**Request:**
+
+```json
+{
+  "type": "article",
+  "targetLanguage": "es",
+  "data": {
+    "articleContent": {...}
+  }
+}
+```
+
+### Utility Endpoints
+
+#### `/api/code-execution`
+
+Executes code safely in E2B sandbox environment.
+
+#### `/api/voices`
+
+Retrieves available voice options for text-to-speech.
+
+#### `/api/test-voices`
+
+Tests voice synthesis with sample text.
+
+#### `/api/test-env`
+
+Environment testing and validation.
+
+## 💡 Usage Examples
+
+### Creating Educational Videos
+
+1. Navigate to `/explain`
+2. Enter a mathematical concept (e.g., "quadratic equations")
+3. Choose visualization options
+4. Generate Manim animation with AI narration
+
+### Generating Articles
+
+1. Go to `/article`
+2. Specify topic and audience level
+3. Select article structure
+4. Generate comprehensive educational content
+
+### Multilingual Content
+
+1. Create content in any supported language
+2. Use translation API to convert to multiple languages
+3. Generate audio narration in target languages
+4. Access content library for all versions
+
+### Interactive Learning
+
+1. Use chatbot for conversational explanations
+2. Generate lesson breakdowns with activities
+3. Create video + audio combinations
+4. Save everything to your personal library
+
 ## 🎨 Components
 
-### ConceptInputForm
-Interactive form for submitting mathematical concepts to visualize.
+### Core UI Components
 
-### ShaderBackground
-Dynamic WebGL shader background for visual appeal.
+- **ConceptInputForm** - Interactive form for submitting concepts to visualize
+- **ContentModeSelector** - Toggle between different content generation modes
+- **LanguageSelector** - Select target languages for translation
+- **Navbar** - Main navigation component
+- **Footer** - Site footer with links
 
-### TypewriterText
-Animated text component with typewriter effect.
+### Content Display Components
 
-### SubmittedTopicTitle
-Displays the current topic being processed.
+- **ArticleDisplay** - Basic article rendering
+- **EnhancedArticleDisplay** - Advanced article display with formatting
+- **SimpleEnhancedArticleDisplay** - Lightweight article display
+- **LessonArticleDisplay** - Specialized display for lesson content
+- **LessonBreakdown** - Interactive lesson breakdown component
+- **EnhancedLessonBreakdown** - Advanced lesson breakdown with activities
+
+### Interactive Components
+
+- **VideoWithAudio** - Synchronized video and audio playback
+- **TypewriterText** - Animated typewriter text effect
+- **SubmittedTopicTitle** - Displays current topic being processed
+- **ShaderBackground** - Dynamic WebGL shader background effects
 
 ## 🔒 Security Features
 
@@ -169,11 +359,13 @@ Displays the current topic being processed.
 ### Common Issues
 
 1. **E2B Sandbox Fails to Start**
+
    - Ensure your E2B API key is valid
    - Check that the template `q6wznn8hq65ffgkd0tqh` exists
    - Rebuild the template if necessary
 
 2. **Manim Import Errors**
+
    - Verify the sandbox template includes all Manim dependencies
    - Check the Docker build logs for any installation issues
 
@@ -183,10 +375,16 @@ Displays the current topic being processed.
 
 ### Testing the Sandbox
 
-Use the provided test notebook:
+Test the Manim environment using the example scene:
+
 ```bash
-jupyter notebook test_manim.ipynb
+python StringTheoryScene.py
 ```
+
+Or use the built-in API testing endpoints:
+
+- `/api/test-env` - Environment validation
+- `/api/test-voices` - Voice synthesis testing
 
 ## 🤝 Contributing
 
@@ -202,9 +400,25 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 🔗 Links
 
-- [E2B Documentation](https://e2b.dev/docs)
-- [Manim Documentation](https://docs.manim.community/)
-- [Next.js Documentation](https://nextjs.org/docs)
+### Documentation
+
+- [E2B Documentation](https://e2b.dev/docs) - Sandbox execution platform
+- [Manim Documentation](https://docs.manim.community/) - Mathematical animation engine
+- [Next.js Documentation](https://nextjs.org/docs) - React framework
+- [OpenRouter Documentation](https://openrouter.ai/docs) - AI model provider
+- [Murf AI Documentation](https://docs.murf.ai/) - Text-to-speech service
+- [Vercel Blob Documentation](https://vercel.com/docs/storage/vercel-blob) - File storage
+
+### Related Tools
+
+- [Tailwind CSS](https://tailwindcss.com/docs) - Utility-first CSS framework
+- [Paper Design Shaders](https://github.com/paper-design/shaders) - WebGL shader effects
+- [Motion](https://motion.dev/) - Animation library
+
+### Development
+
+- [TypeScript Documentation](https://www.typescriptlang.org/docs/) - Type safety
+- [Bun Documentation](https://bun.sh/docs) - Fast JavaScript runtime
 
 ## 📧 Support
 
