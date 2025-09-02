@@ -1,36 +1,51 @@
 import { NextRequest, NextResponse } from "next/server";
-import { generateLessonBreakdown } from "@/utils/lessonBreakdown";
-
 import { executeCodeAndListFiles } from "@/utils/sandbox";
 import { generateVoiceNarration } from "@/utils/voiceNarration";
-import { validateAndFixManimCode } from "@/utils/structuredManimGenerator";
+import { generateStructuredManimCode } from "@/utils/structuredManimGenerator";
 import { convertEscapedNewlines } from "@/utils/formatManimCode";
 
 async function generateSingleVideo(topic: string, includeVoice: boolean) {
   console.log(`🎬 Starting single video generation for: ${topic}`);
 
-  // 1. Generate a single, detailed "lesson"
-  const lessonBreakdown = await generateLessonBreakdown(topic); // Generate lesson breakdown
-  if (!lessonBreakdown || lessonBreakdown.lessons.length === 0) {
-    throw new Error("Failed to generate script for the topic.");
-  }
-  const lesson = lessonBreakdown.lessons[0];
-  console.log("📝 Generated script:", lesson.script.substring(0, 150) + "...");
+  // 1. Generate structured Manim code directly
+  const manimCode = await generateStructuredManimCode(topic);
+  console.log("🤖 Manim code generated and validated.");
+  
+  // Log the generated code for debugging
+  console.log("Generated Manim code:");
+  console.log("=".repeat(50));
+  console.log(manimCode);
+  console.log("=".repeat(50));
 
-  // 2. Validate and prepare Manim code
-  const validatedCode = validateAndFixManimCode(lesson.manim_code);
-  const manimCode = convertEscapedNewlines(validatedCode);
-  console.log("🤖 Manim code prepared.");
+  // 2. Convert escaped newlines for execution
+  const formattedManimCode = convertEscapedNewlines(manimCode);
 
   // 3. Execute Manim code to generate video
-  const executionResult = await executeCodeAndListFiles(manimCode);
-  if (executionResult.error || executionResult.videoFiles.length === 0) {
-    console.error("Manim execution failed:", executionResult.error);
-    console.error("Execution logs:", executionResult.execution.logs);
+  const executionResult = await executeCodeAndListFiles(formattedManimCode);
+  
+  // Enhanced error logging
+  console.log("Execution result details:", {
+    success: executionResult.success,
+    error: executionResult.error,
+    executionError: executionResult.execution?.error,
+    hasVideoFiles: executionResult.videoFiles?.length > 0,
+    videoFilesCount: executionResult.videoFiles?.length || 0,
+    executionLogs: executionResult.execution?.logs || "No execution logs available"
+  });
+
+  if (!executionResult.success || executionResult.videoFiles.length === 0) {
+    console.error("Manim execution failed:", executionResult.error || executionResult.execution?.error);
+    console.error("Execution logs:", executionResult.execution?.logs || "No logs available");
+    
+    // Log the Manim code that failed for debugging
+    console.error("Failed Manim code:");
+    console.error(formattedManimCode);
+    
+    const errorMessage = executionResult.error || executionResult.execution?.error || "No video produced.";
+    const logs = executionResult.execution?.logs || ["No logs available"];
+    
     throw new Error(
-      `Manim execution failed. Error: ${
-        executionResult.error || "No video produced."
-      }`
+      `Manim execution failed. Error: ${errorMessage}. Logs: ${JSON.stringify(logs)}`
     );
   }
   console.log("📹 Video file generated:", executionResult.videoFiles[0].path);
@@ -41,16 +56,19 @@ async function generateSingleVideo(topic: string, includeVoice: boolean) {
 
   let voiceData = null;
   if (includeVoice) {
-    console.log("🗣️ Generating voice narration...");
-    voiceData = await generateVoiceNarration(topic, lesson.script, {
-      style: "professional",
+    console.log("🗣️ Generating educational voice narration...");
+    // Generate a comprehensive educational script that aligns with the 5-phase structure
+    const script = `Welcome to this comprehensive exploration of ${topic}. In this video, we'll start with a real-world problem that motivates why this concept matters, then build your understanding step by step through clear visual explanations. We'll address common misconceptions, explore practical applications, and connect everything back to the big picture. Let's begin this learning journey together.`;
+
+    voiceData = await generateVoiceNarration(topic, script, {
+      style: "educational",
     });
-    console.log("🔊 Voice narration generated.");
+    console.log("🔊 Educational voice narration generated with pedagogical focus.");
   }
 
   return {
     topic,
-    manimCode,
+    manimCode: formattedManimCode,
     videoUrl,
     voiceData,
     success: true,

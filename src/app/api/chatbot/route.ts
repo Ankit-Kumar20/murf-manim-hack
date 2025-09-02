@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
 
     // Get AI response using OpenRouter
     const { text: responseText } = await generateText({
-      model: openrouter("openai/gpt-4o"),
+      model: openrouter("anthropic/claude-3.5-sonnet"),
       messages: promptMessages
     });
     
