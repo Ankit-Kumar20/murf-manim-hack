@@ -193,8 +193,8 @@ export async function executeCodeAndListFiles(code: string) {
     // Use -qm (medium quality) instead of -pql (preview low quality) to get better videos
     // Removed -p flag to prevent preview popup and potential render issues
     const command = sceneClassName
-      ? `cd /code && manim -pqm -v WARNING ${filename} ${sceneClassName}`
-      : `cd /code && manim -pqm -v WARNING ${filename}`;
+      ? `cd /code && manim -qm ${filename} ${sceneClassName}`
+      : `cd /code && manim -qm ${filename}`;
 
     console.log(`Running command: ${command}`);
     // Run the Manim command to generate animations
@@ -312,7 +312,7 @@ export async function executeCodeAndListFiles(code: string) {
               // Download each video file and upload to blob storage
               for (const videoFile of mp4Files) {
                 const videoFilePath = `${videosPath}/${recentVideoDir.name}/${qualityDir.name}/${videoFile.name}`;
-                console.log(`Found video file: ${videoFilePath}`);
+                console.log(`----------Found video file: ${videoFilePath}`);
 
                 try {
                   // Use base64 encoding to transfer binary files reliably

@@ -176,7 +176,7 @@ Make sure each section is substantial and the total content meets the EXACT char
   try {
     // Generate the article content
     const { text: articleJson } = await generateText({
-      model: openrouter("openai/gpt-4o"),
+      model: openrouter("anthropic/claude-3.5-sonnet"),
       messages: [
         {
           role: 'system',
